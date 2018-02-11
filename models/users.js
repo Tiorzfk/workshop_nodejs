@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 var database = require('../config/database');
+var bcrypt = require('bcrypt');
 
 var userScheme = {
     email: {
@@ -26,7 +27,7 @@ var Users = database.define("users", userScheme, {
 
 Users.beforeCreate(function (user, options) {
     if (user.password) {
-        user.set("password", security.hashPassword(10, user.password));
+        user.set("password", bcrypt.hashSync(user.password, 10));
     } else {
         user.set("password", null);
     }
